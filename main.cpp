@@ -1,17 +1,32 @@
-#include <iostream>
-#include <vector>
-#include <string>
-
-using namespace std;
+#define GL_SILENCE_DEPRECATION
+#include <GLFW/glfw3.h>
 
 int main()
 {
-    vector<string> msg{"Hello", "C++", "World", "from", "VS Code!"};
+    GLFWwindow *window;
 
-    for (const string &word : msg)
-        cout << word << " ";
+    if (!glfwInit())
+        return -1;
 
-    cout << endl;
+    window = glfwCreateWindow(640, 480, "Hello GLFW", NULL, NULL);
 
+    if (!window)
+    {
+        glfwTerminate();
+        return -1;
+    }
+
+    glfwMakeContextCurrent(window);
+
+    while (!glfwWindowShouldClose(window))
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glfwSwapBuffers(window);
+
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
     return 0;
 }
