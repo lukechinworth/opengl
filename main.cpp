@@ -1,12 +1,13 @@
-#define GL_SILENCE_DEPRECATION
+#include <stdio.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 int main()
 {
-    GLFWwindow *window;
-
     if (!glfwInit())
         return -1;
+
+    GLFWwindow *window;
 
     window = glfwCreateWindow(640, 480, "Hello GLFW", NULL, NULL);
 
@@ -17,6 +18,17 @@ int main()
     }
 
     glfwMakeContextCurrent(window);
+
+    GLenum err = glewInit();
+
+    if (err != GLEW_OK)
+    {
+        fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+        glfwTerminate();
+        return -1;
+    }
+
+    fprintf(stderr, "OpenGL version: %s", glGetString(GL_VERSION));
 
     while (!glfwWindowShouldClose(window))
     {
