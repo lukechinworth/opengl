@@ -1,4 +1,5 @@
 ## Dependencies
+* `brew install glew`
 * `brew install glfw`
 
 ## Build
