@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-static unsigned int CompileShader(unsigned int type, const std::string &source)
+static unsigned int CreateShader(unsigned int type, const std::string &source)
 {
     unsigned int shaderId = glCreateShader(type);
     const char *shaderSrc = source.c_str();
@@ -26,28 +26,43 @@ static unsigned int CompileShader(unsigned int type, const std::string &source)
 
         glDeleteShader(shaderId);
 
-        return 0;
+        return -1;
     }
 
     return shaderId;
 }
 
-static unsigned int CreateShader(const std::string &vertexShaderSrc, const std::string &fragmentShaderSrc)
+static unsigned int CreateShaderProgram(const std::string &vertexShaderSrc, const std::string &fragmentShaderSrc)
 {
     unsigned int program = glCreateProgram();
-    unsigned int vertexShader = CompileShader(GL_VERTEX_SHADER, vertexShaderSrc);
-    unsigned int fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentShaderSrc);
+    unsigned int vertexShader = CreateShader(GL_VERTEX_SHADER, vertexShaderSrc);
+    unsigned int fragmentShader = CreateShader(GL_FRAGMENT_SHADER, fragmentShaderSrc);
 
     glAttachShader(program, vertexShader);
     glAttachShader(program, fragmentShader);
 
     glLinkProgram(program);
-    glValidateProgram(program);
 
-    // Will remove shader src code, so we won't be able to breakpoint in the shader src,
-    // but can remove these two lines if need to debug shader.
-    // glDetachShader(program, vertexShader);
-    // glDetachShader(program, fragmentShader);
+    int result;
+    glGetProgramiv(program, GL_LINK_STATUS, &result);
+
+    if (result == GL_FALSE)
+    {
+        int infoLogLength;
+        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+        char *strInfoLog = new GLchar(infoLogLength + 1);
+        glGetProgramInfoLog(program, infoLogLength, nullptr, strInfoLog);
+
+        std::cout << "Linker failure: %s\n"
+                  << strInfoLog << std::endl;
+
+        delete strInfoLog;
+
+        return -1;
+    }
+
+    glValidateProgram(program);
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
@@ -91,23 +106,21 @@ int main()
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
     float positions[] = {
-        -0.5f, -0.5f,
+        -1.5f, -0.5f,
         0.0f, 0.5f,
-        0.5f, -0.5f};
-    unsigned int buffer;
+        0.0f, -0.5f};
 
+    unsigned int buffer;
     glGenBuffers(1, &buffer);
+
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, 3 * 2 * sizeof(float), positions, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // We have to bind the vertex array here on MAC, even though on windows it is not required.
     unsigned int vertexArray;
-
     glGenVertexArrays(1, &vertexArray);
     glBindVertexArray(vertexArray);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 
     std::string vertexShaderSrc =
         "#version 330 core\n"
@@ -120,24 +133,34 @@ int main()
         "}\n";
 
     std::string fragmentShaderSrc =
-        "#version 330 core\n"
-        "\n"
-        "layout(location = 0) out vec4 color;\n"
-        "\n"
+        "#version 330\n"
+
+        "out vec4 color;\n"
+
         "void main()\n"
         "{\n"
-        "   color = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "    float lerpValue = gl_FragCoord.y / 480.0f;\n"
+
+        "    color = mix(vec4(0.0, 1.0, 0.0, 1.0), vec4(0.0, 0.0, 1.0, 1.0), lerpValue);\n"
         "}\n";
 
-    unsigned int shader = CreateShader(vertexShaderSrc, fragmentShaderSrc);
-
-    glUseProgram(shader);
+    unsigned int shader = CreateShaderProgram(vertexShaderSrc, fragmentShaderSrc);
 
     while (!glfwWindowShouldClose(window))
     {
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glUseProgram(shader);
+
+        glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+
         glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        glDisableVertexAttribArray(0);
+        glUseProgram(0);
 
         glfwSwapBuffers(window);
 
