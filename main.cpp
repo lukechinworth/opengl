@@ -117,16 +117,19 @@ int main()
 
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
-    float positions[] = {
-        -1.5f, -0.5f,
-        0.0f, 0.5f,
-        0.0f, -0.5f};
+    float vertices[] = {
+        0.0f, 0.5f, 0.0f, 1.0f,
+        0.5f, -0.366f, 0.0f, 1.0f,
+        -0.5f, -0.366f, 0.0f, 1.0f,
+        1.0f, 0.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f, 1.0f};
 
     unsigned int buffer;
     glGenBuffers(1, &buffer);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // We have to bind the vertex array here on MAC, even though on windows it is not required.
@@ -149,11 +152,14 @@ int main()
 
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)48);
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
         glUseProgram(0);
 
         glfwSwapBuffers(window);

@@ -1,10 +1,9 @@
 #version 330
 
+smooth in vec4 vertexColor;
 out vec4 color;
 
 void main()
 {
-    float lerpValue = gl_FragCoord.y / 480.0f;
-
-    color = mix(vec4(0.0, 1.0, 0.0, 1.0), vec4(0.0, 0.0, 1.0, 1.0), lerpValue);
+    color = vertexColor;
 }
