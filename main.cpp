@@ -1,6 +1,18 @@
 #include <iostream>
+#include <sstream>
+#include <fstream>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+std::string getFileToString(std::string fileName)
+{
+    std::ifstream input(fileName);
+    std::stringstream buffer;
+    buffer << input.rdbuf();
+
+    return buffer.str();
+}
 
 static unsigned int CreateShader(unsigned int type, const std::string &source)
 {
@@ -122,27 +134,9 @@ int main()
     glGenVertexArrays(1, &vertexArray);
     glBindVertexArray(vertexArray);
 
-    std::string vertexShaderSrc =
-        "#version 330 core\n"
-        "\n"
-        "layout(location = 0) in vec4 position;\n"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = position;\n"
-        "}\n";
+    std::string vertexShaderSrc = getFileToString("vertexShader.glsl");
 
-    std::string fragmentShaderSrc =
-        "#version 330\n"
-
-        "out vec4 color;\n"
-
-        "void main()\n"
-        "{\n"
-        "    float lerpValue = gl_FragCoord.y / 480.0f;\n"
-
-        "    color = mix(vec4(0.0, 1.0, 0.0, 1.0), vec4(0.0, 0.0, 1.0, 1.0), lerpValue);\n"
-        "}\n";
+    std::string fragmentShaderSrc = getFileToString("fragmentShader.glsl");
 
     unsigned int shader = CreateShaderProgram(vertexShaderSrc, fragmentShaderSrc);
 
