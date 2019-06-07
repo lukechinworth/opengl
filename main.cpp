@@ -1,17 +1,29 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <math.h>
+#include <vector>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+static unsigned int verticesBuffer;
+
+static float vertices[] = {
+    0.0f, 0.5f, 0.0f, 1.0f,
+    0.5f, -0.366f, 0.0f, 1.0f,
+    -0.5f, -0.366f, 0.0f, 1.0f,
+    1.0f, 0.0f, 0.0f, 1.0f,
+    0.0f, 1.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f, 1.0f};
+
 std::string getFileToString(std::string fileName)
 {
     std::ifstream input(fileName);
-    std::stringstream buffer;
-    buffer << input.rdbuf();
+    std::stringstream fileBuffer;
+    fileBuffer << input.rdbuf();
 
-    return buffer.str();
+    return fileBuffer.str();
 }
 
 static unsigned int CreateShader(unsigned int type, const std::string &source)
@@ -82,6 +94,36 @@ static unsigned int CreateShaderProgram(const std::string &vertexShaderSrc, cons
     return program;
 }
 
+void ComputePositionOffsets(float &fXOffset, float &fYOffset)
+{
+    const float fLoopDuration = 5.0f;
+    const float fScale = 3.14159f * 2.0f / fLoopDuration;
+
+    float fElapsedTime = glfwGetTime();
+
+    float fCurrentTImeThroughLoop = fmodf(fElapsedTime, fLoopDuration);
+
+    fXOffset = cosf(fCurrentTImeThroughLoop * fScale) * 0.5f;
+    fYOffset = sinf(fCurrentTImeThroughLoop * fScale) * 0.5f;
+}
+
+void AdjustVertexData(float fXOffset, float fYOffset)
+{
+    int verticesCount = sizeof(vertices) / sizeof(*vertices);
+    std::vector<float> fNewData(verticesCount);
+    memcpy(&fNewData[0], vertices, sizeof(vertices));
+
+    for (int iVertex = 0; iVertex < verticesCount; iVertex += 4)
+    {
+        fNewData[iVertex] += fXOffset;
+        fNewData[iVertex + 1] += fYOffset;
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), &fNewData[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 int main()
 {
     if (!glfwInit())
@@ -117,19 +159,10 @@ int main()
 
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
-    float vertices[] = {
-        0.0f, 0.5f, 0.0f, 1.0f,
-        0.5f, -0.366f, 0.0f, 1.0f,
-        -0.5f, -0.366f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        0.0f, 1.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f, 1.0f};
+    glGenBuffers(1, &verticesBuffer);
 
-    unsigned int buffer;
-    glGenBuffers(1, &buffer);
-
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STREAM_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // We have to bind the vertex array here on MAC, even though on windows it is not required.
@@ -145,16 +178,21 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
+        float fXOffset = 0.0f;
+        float fYOffset = 0.0f;
+        ComputePositionOffsets(fXOffset, fYOffset);
+        AdjustVertexData(fXOffset, fYOffset);
+
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shader);
 
-        glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)48);
+        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void *)48);
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
