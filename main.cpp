@@ -94,19 +94,6 @@ static unsigned int CreateShaderProgram(const std::string &vertexShaderSrc, cons
     return program;
 }
 
-void ComputePositionOffsets(float &fXOffset, float &fYOffset)
-{
-    const float fLoopDuration = 5.0f;
-    const float fScale = 3.14159f * 2.0f / fLoopDuration;
-
-    float fElapsedTime = glfwGetTime();
-
-    float fCurrentTImeThroughLoop = fmodf(fElapsedTime, fLoopDuration);
-
-    fXOffset = cosf(fCurrentTImeThroughLoop * fScale) * 0.5f;
-    fYOffset = sinf(fCurrentTImeThroughLoop * fScale) * 0.5f;
-}
-
 int main()
 {
     if (!glfwInit())
@@ -158,20 +145,21 @@ int main()
     std::string fragmentShaderSrc = getFileToString("fragmentShader.glsl");
 
     unsigned int shaderProgram = CreateShaderProgram(vertexShaderSrc, fragmentShaderSrc);
-    int offsetUniformLocation = glGetUniformLocation(shaderProgram, "offset");
+    int loopDurationUniformLocation = glGetUniformLocation(shaderProgram, "loopDuration");
+    int elapsedTimeUniformLocation = glGetUniformLocation(shaderProgram, "elapsedTime");
+
+    glUseProgram(shaderProgram);
+    glUniform1f(loopDurationUniformLocation, 5.0f);
+    glUseProgram(0);
 
     while (!glfwWindowShouldClose(window))
     {
-        float fXOffset = 0.0f;
-        float fYOffset = 0.0f;
-        ComputePositionOffsets(fXOffset, fYOffset);
-
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
 
-        glUniform2f(offsetUniformLocation, fXOffset, fYOffset);
+        glUniform1f(elapsedTimeUniformLocation, glfwGetTime());
 
         glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);
         glEnableVertexAttribArray(0);
