@@ -140,9 +140,9 @@ int main()
     glGenVertexArrays(1, &vertexArray);
     glBindVertexArray(vertexArray);
 
-    std::string vertexShaderSrc = getFileToString("vertexShader.glsl");
+    std::string vertexShaderSrc = getFileToString("vertexShader.vert");
 
-    std::string fragmentShaderSrc = getFileToString("fragmentShader.glsl");
+    std::string fragmentShaderSrc = getFileToString("fragmentShader.frag");
 
     unsigned int shaderProgram = CreateShaderProgram(vertexShaderSrc, fragmentShaderSrc);
     int loopDurationUniformLocation = glGetUniformLocation(shaderProgram, "loopDuration");
