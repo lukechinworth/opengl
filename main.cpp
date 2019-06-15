@@ -9,13 +9,102 @@
 
 static unsigned int verticesBuffer;
 
-static float vertices[] = {
-    0.0f, 0.5f, 0.0f, 1.0f,
-    0.5f, -0.366f, 0.0f, 1.0f,
-    -0.5f, -0.366f, 0.0f, 1.0f,
-    1.0f, 0.0f, 0.0f, 1.0f,
+const float vertices[] = {
+    0.25f, 0.25f, 0.75f, 1.0f,
+    0.25f, -0.25f, 0.75f, 1.0f,
+    -0.25f, 0.25f, 0.75f, 1.0f,
+
+    0.25f, -0.25f, 0.75f, 1.0f,
+    -0.25f, -0.25f, 0.75f, 1.0f,
+    -0.25f, 0.25f, 0.75f, 1.0f,
+
+    0.25f, 0.25f, -0.75f, 1.0f,
+    -0.25f, 0.25f, -0.75f, 1.0f,
+    0.25f, -0.25f, -0.75f, 1.0f,
+
+    0.25f, -0.25f, -0.75f, 1.0f,
+    -0.25f, 0.25f, -0.75f, 1.0f,
+    -0.25f, -0.25f, -0.75f, 1.0f,
+
+    -0.25f, 0.25f, 0.75f, 1.0f,
+    -0.25f, -0.25f, 0.75f, 1.0f,
+    -0.25f, -0.25f, -0.75f, 1.0f,
+
+    -0.25f, 0.25f, 0.75f, 1.0f,
+    -0.25f, -0.25f, -0.75f, 1.0f,
+    -0.25f, 0.25f, -0.75f, 1.0f,
+
+    0.25f, 0.25f, 0.75f, 1.0f,
+    0.25f, -0.25f, -0.75f, 1.0f,
+    0.25f, -0.25f, 0.75f, 1.0f,
+
+    0.25f, 0.25f, 0.75f, 1.0f,
+    0.25f, 0.25f, -0.75f, 1.0f,
+    0.25f, -0.25f, -0.75f, 1.0f,
+
+    0.25f, 0.25f, -0.75f, 1.0f,
+    0.25f, 0.25f, 0.75f, 1.0f,
+    -0.25f, 0.25f, 0.75f, 1.0f,
+
+    0.25f, 0.25f, -0.75f, 1.0f,
+    -0.25f, 0.25f, 0.75f, 1.0f,
+    -0.25f, 0.25f, -0.75f, 1.0f,
+
+    0.25f, -0.25f, -0.75f, 1.0f,
+    -0.25f, -0.25f, 0.75f, 1.0f,
+    0.25f, -0.25f, 0.75f, 1.0f,
+
+    0.25f, -0.25f, -0.75f, 1.0f,
+    -0.25f, -0.25f, -0.75f, 1.0f,
+    -0.25f, -0.25f, 0.75f, 1.0f,
+
+    0.0f, 0.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 1.0f, 1.0f,
+
+    0.0f, 0.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 1.0f, 1.0f,
+
+    0.8f, 0.8f, 0.8f, 1.0f,
+    0.8f, 0.8f, 0.8f, 1.0f,
+    0.8f, 0.8f, 0.8f, 1.0f,
+
+    0.8f, 0.8f, 0.8f, 1.0f,
+    0.8f, 0.8f, 0.8f, 1.0f,
+    0.8f, 0.8f, 0.8f, 1.0f,
+
     0.0f, 1.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f, 1.0f};
+    0.0f, 1.0f, 0.0f, 1.0f,
+    0.0f, 1.0f, 0.0f, 1.0f,
+
+    0.0f, 1.0f, 0.0f, 1.0f,
+    0.0f, 1.0f, 0.0f, 1.0f,
+    0.0f, 1.0f, 0.0f, 1.0f,
+
+    0.5f, 0.5f, 0.0f, 1.0f,
+    0.5f, 0.5f, 0.0f, 1.0f,
+    0.5f, 0.5f, 0.0f, 1.0f,
+
+    0.5f, 0.5f, 0.0f, 1.0f,
+    0.5f, 0.5f, 0.0f, 1.0f,
+    0.5f, 0.5f, 0.0f, 1.0f,
+
+    1.0f, 0.0f, 0.0f, 1.0f,
+    1.0f, 0.0f, 0.0f, 1.0f,
+    1.0f, 0.0f, 0.0f, 1.0f,
+
+    1.0f, 0.0f, 0.0f, 1.0f,
+    1.0f, 0.0f, 0.0f, 1.0f,
+    1.0f, 0.0f, 0.0f, 1.0f,
+
+    0.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 1.0f, 1.0f, 1.0f,
+
+    0.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 1.0f, 1.0f, 1.0f};
 
 std::string getFileToString(std::string fileName)
 {
@@ -140,16 +229,19 @@ int main()
     glGenVertexArrays(1, &vertexArray);
     glBindVertexArray(vertexArray);
 
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CW);
+
     std::string vertexShaderSrc = getFileToString("vertexShader.vert");
 
     std::string fragmentShaderSrc = getFileToString("fragmentShader.frag");
 
     unsigned int shaderProgram = CreateShaderProgram(vertexShaderSrc, fragmentShaderSrc);
-    int loopDurationUniformLocation = glGetUniformLocation(shaderProgram, "loopDuration");
-    int elapsedTimeUniformLocation = glGetUniformLocation(shaderProgram, "elapsedTime");
+    int offsetUniformLocation = glGetUniformLocation(shaderProgram, "offset");
 
     glUseProgram(shaderProgram);
-    glUniform1f(loopDurationUniformLocation, 5.0f);
+    glUniform2f(offsetUniformLocation, 0.25f, 0.25f);
     glUseProgram(0);
 
     while (!glfwWindowShouldClose(window))
@@ -159,15 +251,17 @@ int main()
 
         glUseProgram(shaderProgram);
 
-        glUniform1f(elapsedTimeUniformLocation, glfwGetTime());
-
         glBindBuffer(GL_ARRAY_BUFFER, verticesBuffer);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void *)48);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        // Changing the vertices requires changing
+        // * offset, which is the last argument.
+        // * number of triangles drawn below.
+        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void *)(sizeof(vertices) / 2));
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
