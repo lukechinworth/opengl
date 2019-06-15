@@ -10,53 +10,53 @@
 static unsigned int verticesBuffer;
 
 const float vertices[] = {
-    0.25f, 0.25f, 0.75f, 1.0f,
-    0.25f, -0.25f, 0.75f, 1.0f,
-    -0.25f, 0.25f, 0.75f, 1.0f,
+    0.25f, 0.25f, -1.25f, 1.0f,
+    0.25f, -0.25f, -1.25f, 1.0f,
+    -0.25f, 0.25f, -1.25f, 1.0f,
 
-    0.25f, -0.25f, 0.75f, 1.0f,
-    -0.25f, -0.25f, 0.75f, 1.0f,
-    -0.25f, 0.25f, 0.75f, 1.0f,
+    0.25f, -0.25f, -1.25f, 1.0f,
+    -0.25f, -0.25f, -1.25f, 1.0f,
+    -0.25f, 0.25f, -1.25f, 1.0f,
 
-    0.25f, 0.25f, -0.75f, 1.0f,
-    -0.25f, 0.25f, -0.75f, 1.0f,
-    0.25f, -0.25f, -0.75f, 1.0f,
+    0.25f, 0.25f, -2.75f, 1.0f,
+    -0.25f, 0.25f, -2.75f, 1.0f,
+    0.25f, -0.25f, -2.75f, 1.0f,
 
-    0.25f, -0.25f, -0.75f, 1.0f,
-    -0.25f, 0.25f, -0.75f, 1.0f,
-    -0.25f, -0.25f, -0.75f, 1.0f,
+    0.25f, -0.25f, -2.75f, 1.0f,
+    -0.25f, 0.25f, -2.75f, 1.0f,
+    -0.25f, -0.25f, -2.75f, 1.0f,
 
-    -0.25f, 0.25f, 0.75f, 1.0f,
-    -0.25f, -0.25f, 0.75f, 1.0f,
-    -0.25f, -0.25f, -0.75f, 1.0f,
+    -0.25f, 0.25f, -1.25f, 1.0f,
+    -0.25f, -0.25f, -1.25f, 1.0f,
+    -0.25f, -0.25f, -2.75f, 1.0f,
 
-    -0.25f, 0.25f, 0.75f, 1.0f,
-    -0.25f, -0.25f, -0.75f, 1.0f,
-    -0.25f, 0.25f, -0.75f, 1.0f,
+    -0.25f, 0.25f, -1.25f, 1.0f,
+    -0.25f, -0.25f, -2.75f, 1.0f,
+    -0.25f, 0.25f, -2.75f, 1.0f,
 
-    0.25f, 0.25f, 0.75f, 1.0f,
-    0.25f, -0.25f, -0.75f, 1.0f,
-    0.25f, -0.25f, 0.75f, 1.0f,
+    0.25f, 0.25f, -1.25f, 1.0f,
+    0.25f, -0.25f, -2.75f, 1.0f,
+    0.25f, -0.25f, -1.25f, 1.0f,
 
-    0.25f, 0.25f, 0.75f, 1.0f,
-    0.25f, 0.25f, -0.75f, 1.0f,
-    0.25f, -0.25f, -0.75f, 1.0f,
+    0.25f, 0.25f, -1.25f, 1.0f,
+    0.25f, 0.25f, -2.75f, 1.0f,
+    0.25f, -0.25f, -2.75f, 1.0f,
 
-    0.25f, 0.25f, -0.75f, 1.0f,
-    0.25f, 0.25f, 0.75f, 1.0f,
-    -0.25f, 0.25f, 0.75f, 1.0f,
+    0.25f, 0.25f, -2.75f, 1.0f,
+    0.25f, 0.25f, -1.25f, 1.0f,
+    -0.25f, 0.25f, -1.25f, 1.0f,
 
-    0.25f, 0.25f, -0.75f, 1.0f,
-    -0.25f, 0.25f, 0.75f, 1.0f,
-    -0.25f, 0.25f, -0.75f, 1.0f,
+    0.25f, 0.25f, -2.75f, 1.0f,
+    -0.25f, 0.25f, -1.25f, 1.0f,
+    -0.25f, 0.25f, -2.75f, 1.0f,
 
-    0.25f, -0.25f, -0.75f, 1.0f,
-    -0.25f, -0.25f, 0.75f, 1.0f,
-    0.25f, -0.25f, 0.75f, 1.0f,
+    0.25f, -0.25f, -2.75f, 1.0f,
+    -0.25f, -0.25f, -1.25f, 1.0f,
+    0.25f, -0.25f, -1.25f, 1.0f,
 
-    0.25f, -0.25f, -0.75f, 1.0f,
-    -0.25f, -0.25f, -0.75f, 1.0f,
-    -0.25f, -0.25f, 0.75f, 1.0f,
+    0.25f, -0.25f, -2.75f, 1.0f,
+    -0.25f, -0.25f, -2.75f, 1.0f,
+    -0.25f, -0.25f, -1.25f, 1.0f,
 
     0.0f, 0.0f, 1.0f, 1.0f,
     0.0f, 0.0f, 1.0f, 1.0f,
@@ -239,9 +239,16 @@ int main()
 
     unsigned int shaderProgram = CreateShaderProgram(vertexShaderSrc, fragmentShaderSrc);
     int offsetUniformLocation = glGetUniformLocation(shaderProgram, "offset");
+    int zNearUniformLocation = glGetUniformLocation(shaderProgram, "zNear");
+    int zFarUniformLocation = glGetUniformLocation(shaderProgram, "zFar");
+    int frustumScaleUniformLocation = glGetUniformLocation(shaderProgram, "frustumScale");
 
+    // TODO: copy new vertices position in.
     glUseProgram(shaderProgram);
-    glUniform2f(offsetUniformLocation, 0.25f, 0.25f);
+    glUniform2f(offsetUniformLocation, 0.5f, 0.5f);
+    glUniform1f(zNearUniformLocation, 1.0f);
+    glUniform1f(zFarUniformLocation, 3.0f);
+    glUniform1f(frustumScaleUniformLocation, 1.0f);
     glUseProgram(0);
 
     while (!glfwWindowShouldClose(window))
