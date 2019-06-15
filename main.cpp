@@ -239,16 +239,24 @@ int main()
 
     unsigned int shaderProgram = CreateShaderProgram(vertexShaderSrc, fragmentShaderSrc);
     int offsetUniformLocation = glGetUniformLocation(shaderProgram, "offset");
-    int zNearUniformLocation = glGetUniformLocation(shaderProgram, "zNear");
-    int zFarUniformLocation = glGetUniformLocation(shaderProgram, "zFar");
-    int frustumScaleUniformLocation = glGetUniformLocation(shaderProgram, "frustumScale");
+    int perspectiveMatrixUniformLocation = glGetUniformLocation(shaderProgram, "perspectiveMatrix");
 
-    // TODO: copy new vertices position in.
+    float fFrustumScale = 1.0f;
+    float fzNear = 0.5f;
+    float fzFar = 3.0f;
+    float perspectiveMatrix[16];
+    // Set all indices to 0.
+    memset(perspectiveMatrix, 0, sizeof(float) * 16);
+
+    perspectiveMatrix[0] = fFrustumScale;
+    perspectiveMatrix[5] = fFrustumScale;
+    perspectiveMatrix[10] = (fzNear + fzFar) / (fzNear - fzFar);
+    perspectiveMatrix[14] = 2 * fzNear * fzFar / (fzNear - fzFar);
+    perspectiveMatrix[11] = -1.0f;
+
     glUseProgram(shaderProgram);
     glUniform2f(offsetUniformLocation, 0.5f, 0.5f);
-    glUniform1f(zNearUniformLocation, 1.0f);
-    glUniform1f(zFarUniformLocation, 3.0f);
-    glUniform1f(frustumScaleUniformLocation, 1.0f);
+    glUniformMatrix4fv(perspectiveMatrixUniformLocation, 1, GL_FALSE, perspectiveMatrix);
     glUseProgram(0);
 
     while (!glfwWindowShouldClose(window))
