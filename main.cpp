@@ -8,6 +8,10 @@
 #include <GLFW/glfw3.h>
 
 static unsigned int verticesBuffer;
+unsigned int shaderProgram;
+int perspectiveMatrixUniformLocation;
+const float fFrustumScale = 1.0f;
+float perspectiveMatrix[16];
 
 const float vertices[] = {
     0.25f, 0.25f, -1.25f, 1.0f,
@@ -183,6 +187,18 @@ static unsigned int CreateShaderProgram(const std::string &vertexShaderSrc, cons
     return program;
 }
 
+void resize(GLFWwindow *window, int width, int height)
+{
+    perspectiveMatrix[0] = fFrustumScale / (width / (float) height);
+    perspectiveMatrix[5] = fFrustumScale;
+
+    glUseProgram(shaderProgram);
+    glUniformMatrix4fv(perspectiveMatrixUniformLocation, 1, GL_FALSE, perspectiveMatrix);
+    glUseProgram(0);
+
+    glViewport(0, 0, (GLsizei) width, (GLsizei) height);
+}
+
 int main()
 {
     if (!glfwInit())
@@ -197,7 +213,7 @@ int main()
 
     GLFWwindow *window;
 
-    window = glfwCreateWindow(640, 480, "Hello GLFW", NULL, NULL);
+    window = glfwCreateWindow(480, 480, "Hello GLFW", NULL, NULL);
 
     if (!window)
     {
@@ -215,7 +231,7 @@ int main()
         glfwTerminate();
         return -1;
     }
-
+    glfwSetWindowSizeCallback(window, resize);
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
     glGenBuffers(1, &verticesBuffer);
@@ -237,14 +253,13 @@ int main()
 
     std::string fragmentShaderSrc = getFileToString("fragmentShader.frag");
 
-    unsigned int shaderProgram = CreateShaderProgram(vertexShaderSrc, fragmentShaderSrc);
+    shaderProgram = CreateShaderProgram(vertexShaderSrc, fragmentShaderSrc);
     int offsetUniformLocation = glGetUniformLocation(shaderProgram, "offset");
-    int perspectiveMatrixUniformLocation = glGetUniformLocation(shaderProgram, "perspectiveMatrix");
+    perspectiveMatrixUniformLocation = glGetUniformLocation(shaderProgram, "perspectiveMatrix");
 
-    float fFrustumScale = 1.0f;
     float fzNear = 0.5f;
     float fzFar = 3.0f;
-    float perspectiveMatrix[16];
+
     // Set all indices to 0.
     memset(perspectiveMatrix, 0, sizeof(float) * 16);
 
